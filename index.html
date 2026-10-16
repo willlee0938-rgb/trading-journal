@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="dark" />
   <title>Trading Thesis Journal｜交易規劃與復盤</title>
-  <link rel="stylesheet" href="styles.css?v=20261016-4" />
+  <link rel="stylesheet" href="styles.css?v=20261016-5" />
 </head>
 <body>
   <div class="app-shell">
@@ -31,7 +31,7 @@
   </div>
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="modal-head"><div><span class="eyebrow">NEW JOURNAL ENTRY</span><h2>新增交易規劃</h2></div><button class="icon-btn" value="cancel">✕</button></div><div class="form-grid"><label>標題<input name="title" required placeholder="BTCUSDT｜當日分析" /></label><label>日期時間<input name="datetime" type="datetime-local" required /></label><label>標的<input name="symbol" placeholder="BTCUSDT" /></label><label>事件 / 催化劑<input name="catalyst" placeholder="CPI / FOMC / 無" /></label><label class="full">核心邏輯<textarea name="thesis" required placeholder="我為什麼認為市場可能這樣走？"></textarea></label><label class="full">關鍵價位<input name="levels" placeholder="81,600 / 80,800 / 84,000–85,000" /></label><label class="full">失效條件<textarea name="invalidation" placeholder="什麼情況出現，代表劇本失效？"></textarea></label><label class="full">圖片<input name="images" type="file" accept="image/*" multiple /></label></div><div class="form-actions"><button class="btn ghost" value="cancel">取消</button><button class="btn primary" value="default" id="saveEntryBtn">儲存紀錄</button></div></form></dialog>
   <dialog id="imageDialog" class="image-dialog"><button class="image-close" onclick="this.parentElement.close()">✕</button><img id="lightboxImage" alt="放大圖片" /><p id="lightboxCaption"></p></dialog>
-  <script src="app.js?v=20261016-4"></script>
-  <script src="gallery-fix.js?v=20261016-4"></script>
+  <script src="app.js?v=20261016-5"></script>
+  <script src="gallery-fix.js?v=20261016-5"></script>
 </body>
 </html>
