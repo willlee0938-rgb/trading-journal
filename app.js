@@ -42,16 +42,107 @@ const REVIEW_KEY = 'tradeJournalReviewV1';
 
 function loadEntries(){
   const saved = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-  if(!saved.find(x=>x.id===seedEntry.id)) saved.unshift(seedEntry);
-  return saved;
+  if(!saved.find(x=>x.id===seedEntry.id)) saved.push(seedEntry);
+  return saved.sort((a,b)=>new Date(b.datetime||0)-new Date(a.datetime||0));
 }
 function saveEntries(entries){localStorage.setItem(DB_KEY, JSON.stringify(entries));}
 let entries = loadEntries(); saveEntries(entries);
 
+function getLatestEntry(){
+  return [...entries].sort((a,b)=>new Date(b.datetime||0)-new Date(a.datetime||0))[0] || seedEntry;
+}
+
+function formatDate(s){
+  if(!s)return'';
+  const d=new Date(s);
+  return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d);
+}
+
+function renderDashboardLatest(){
+  const e=getLatestEntry();
+  const hero=$('#dashboard .hero-card');
+  if(hero){
+    const badge=hero.querySelector('.status-badge');
+    const title=hero.querySelector('h2');
+    const meta=hero.querySelector('.muted');
+    const priceLabel=hero.querySelector('.price-box span');
+    const priceValue=hero.querySelector('.price-box strong');
+    const thesis=hero.querySelector('.thesis-callout p');
+    const thesisLabel=hero.querySelector('.thesis-callout span');
+    if(badge) badge.textContent='最新交易劇本';
+    if(title) title.textContent=e.title || '最新分析';
+    if(meta) meta.textContent=`${formatDate(e.datetime)} · ${e.symbol||'未標示標的'}`;
+    if(priceLabel) priceLabel.textContent='最新更新';
+    if(priceValue) priceValue.textContent=(e.datetime||'').slice(5,10).replace('-','/');
+    if(thesisLabel) thesisLabel.textContent='核心邏輯';
+    if(thesis) thesis.textContent=e.thesis || '尚未填寫核心邏輯';
+
+    const metricRow=hero.querySelector('.metric-row');
+    if(metricRow){
+      const levels=(e.levels||'').split(/\s*\/\s*|,|，/).filter(Boolean).slice(0,4);
+      const items=[
+        ['事件 / 催化劑',e.catalyst||'無'],
+        ['標的',e.symbol||'—'],
+        ['關鍵價位 1',levels[0]||'—'],
+        ['關鍵價位 2',levels[1]||levels[0]||'—'],
+        ['狀態','最新一期']
+      ];
+      metricRow.innerHTML=items.map(([k,v])=>`<div><span>${k}</span><strong>${v}</strong></div>`).join('');
+    }
+  }
+
+  const eventCard=$('#dashboard .event-card');
+  if(eventCard){
+    const h3=eventCard.querySelector('h3');
+    const time=eventCard.querySelector('.event-time');
+    const p=eventCard.querySelector('p');
+    const rule=eventCard.querySelector('.event-rule');
+    if(h3) h3.textContent='最近一期分析';
+    if(time) time.textContent=(e.datetime||'').slice(11,16)||'—';
+    if(p) p.textContent=e.catalyst||e.symbol||'當日交易規劃';
+    if(rule) rule.textContent=e.invalidation ? `失效條件：${e.invalidation}` : '失效條件尚未填寫。';
+  }
+
+  const logicSteps=$$('#dashboard .logic-step');
+  const logicData=[
+    ['最新觀點',e.thesis||'尚未填寫核心邏輯'],
+    ['關鍵價位',e.levels||'尚未填寫關鍵價位'],
+    ['失效條件',e.invalidation||'尚未填寫失效條件'],
+    ['執行原則','以最新價格行為確認，不因舊劇本或既有偏見硬套市場。']
+  ];
+  logicSteps.forEach((step,i)=>{
+    const strong=step.querySelector('strong');
+    const p=step.querySelector('p');
+    if(logicData[i]){if(strong)strong.textContent=logicData[i][0];if(p)p.textContent=logicData[i][1];}
+  });
+
+  const scenarioCards=$$('#dashboard .scenario');
+  const scenarios=[
+    ['目前主劇本','核心假設',e.thesis||'尚未填寫'],
+    ['關鍵區域','價位觀察',e.levels||'尚未填寫'],
+    ['風險控制','劇本失效',e.invalidation||'尚未填寫']
+  ];
+  scenarioCards.forEach((card,i)=>{
+    if(!scenarios[i])return;
+    const tag=card.querySelector('.tag');
+    const h4=card.querySelector('h4');
+    const p=card.querySelector('p');
+    if(tag)tag.textContent=scenarios[i][0];
+    if(h4)h4.textContent=scenarios[i][1];
+    if(p)p.textContent=scenarios[i][2];
+  });
+}
+
 function renderEvidence(){
   const root=$('#evidenceGallery');
+  if(!root)return;
   root.innerHTML='';
-  seedEvidence.forEach(item=>{
+  const latest=getLatestEntry();
+  const latestImages=(latest.images||[]).filter(Boolean);
+  const items=latestImages.length
+    ? latestImages.map((src,i)=>({src,title:`最新分析圖片 ${i+1}`,note:`${latest.title} · ${formatDate(latest.datetime)}`}))
+    : seedEvidence;
+  items.forEach(item=>{
     const el=document.createElement('div'); el.className='evidence';
     el.innerHTML=`<img src="${item.src}" alt="${item.title}"><div class="caption"><strong>${item.title}</strong><span>${item.note}</span></div>`;
     el.onclick=()=>openLightbox(item.src,item.title+'｜'+item.note);
@@ -60,7 +151,6 @@ function renderEvidence(){
 }
 function openLightbox(src,caption){$('#lightboxImage').src=src;$('#lightboxCaption').textContent=caption;$('#imageDialog').showModal();}
 
-function formatDate(s){if(!s)return'';const d=new Date(s);return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)}
 function renderEntries(filter=''){
   const root=$('#entriesList'); root.innerHTML='';
   const list=entries.filter(e=>JSON.stringify(e).toLowerCase().includes(filter.toLowerCase()));
@@ -76,7 +166,8 @@ function renderEntries(filter=''){
 function switchView(id){
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===id));
-  const titles={dashboard:'交易規劃總覽',entries:'交易紀錄',review:'復盤中心',settings:'資料管理'};$('#pageTitle').textContent=titles[id];
+  const titles={dashboard:'最新交易劇本',entries:'交易紀錄',review:'復盤中心',settings:'資料管理'};$('#pageTitle').textContent=titles[id];
+  if(id==='dashboard'){renderDashboardLatest();renderEvidence();}
 }
 $$('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
 
@@ -96,12 +187,18 @@ $('#saveReviewBtn').addEventListener('click',()=>{
 });
 
 $('#newEntryBtn').addEventListener('click',()=>{const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); $('#entryForm [name=datetime]').value=d.toISOString().slice(0,16);$('#entryDialog').showModal();});
+
+const entryDialog=$('#entryDialog');
+const entryForm=$('#entryForm');
+entryDialog.querySelectorAll('button[value="cancel"]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();entryForm.reset();entryDialog.close();}));
+entryDialog.addEventListener('click',e=>{if(e.target===entryDialog){entryForm.reset();entryDialog.close();}});
+
 $('#saveEntryBtn').addEventListener('click',async e=>{
   e.preventDefault();const form=$('#entryForm');if(!form.reportValidity())return;
   const fd=new FormData(form);const files=[...form.elements.images.files];const images=[];
   for(const f of files.slice(0,6)) images.push(await compressImage(f));
   const entry={id:'e'+Date.now(),title:fd.get('title'),datetime:fd.get('datetime'),symbol:fd.get('symbol'),catalyst:fd.get('catalyst'),thesis:fd.get('thesis'),levels:fd.get('levels'),invalidation:fd.get('invalidation'),tags:[fd.get('symbol'),fd.get('catalyst')].filter(Boolean),images};
-  entries.unshift(entry);saveEntries(entries);renderEntries();form.reset();$('#entryDialog').close();switchView('entries');
+  entries.unshift(entry);entries.sort((a,b)=>new Date(b.datetime||0)-new Date(a.datetime||0));saveEntries(entries);renderEntries();renderDashboardLatest();renderEvidence();form.reset();$('#entryDialog').close();switchView('dashboard');
 });
 function compressImage(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const max=1400;let w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',.72))};img.onerror=reject;img.src=r.result};r.onerror=reject;r.readAsDataURL(file)});}
 
@@ -110,7 +207,7 @@ function exportAll(){
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`trading-journal-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);
 }
 $('#exportBtn').onclick=exportAll;$('#exportBtn2').onclick=exportAll;
-$('#importInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(Array.isArray(data.entries)){entries=data.entries;saveEntries(entries)}if(data.review)localStorage.setItem(REVIEW_KEY,JSON.stringify(data.review));renderEntries();renderReview();alert('匯入完成');}catch(err){alert('匯入失敗：JSON 格式不正確')}});
+$('#importInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(Array.isArray(data.entries)){entries=data.entries.sort((a,b)=>new Date(b.datetime||0)-new Date(a.datetime||0));saveEntries(entries)}if(data.review)localStorage.setItem(REVIEW_KEY,JSON.stringify(data.review));renderEntries();renderReview();renderDashboardLatest();renderEvidence();alert('匯入完成');}catch(err){alert('匯入失敗：JSON 格式不正確')}});
 $('#searchInput').addEventListener('input',e=>renderEntries(e.target.value));
 
-renderEvidence();renderEntries();renderReview();
+renderDashboardLatest();renderEvidence();renderEntries();renderReview();
