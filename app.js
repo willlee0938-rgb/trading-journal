@@ -1,13 +1,13 @@
 const seedEvidence = [
-  {src:'assets/liquidation-1w.jpeg', title:'清算熱力圖｜1 週', note:'84.7K 一帶存在明顯上方流動性；82K 下方亦有密集區。'},
-  {src:'assets/liquidation-3d.jpeg', title:'清算熱力圖｜3 天', note:'短線 84.5K 左右的黃色帶最突出，適合作為逼空第一觀察區。'},
-  {src:'assets/liquidation-1m.jpeg', title:'清算熱力圖｜1 個月', note:'更高週期在 87–88K 一帶出現較強流動性。'},
-  {src:'assets/tv-4h-scenarios.jpeg', title:'4H 情境草圖', note:'原始推演：可能先上探，也保留回落至 75K 區域的替代路徑。'},
-  {src:'assets/tv-1d-context.jpeg', title:'日線結構', note:'反彈自低位延伸後進入高位震盪，82.6K 為短線關鍵水平。'},
-  {src:'assets/bingx-3d-macd.jpeg', title:'3 日 MACD', note:'DIF 低於 DEA，死叉初步形成，但仍位於零軸上方。'},
-  {src:'assets/bingx-1d-macd.jpeg', title:'日線 MACD', note:'日線 MACD 死叉，且高位動能有背離疑慮。'},
-  {src:'assets/bingx-1w-macd.jpeg', title:'週線動能', note:'週線 MACD 尚偏多，但 KDJ 位置偏高，代表反彈延伸與回撤風險同時存在。'},
-  {src:'assets/tv-1w-orderblock.jpeg', title:'週線 Order Block', note:'上方灰區約 90–94K 為看跌訂單塊 / 供給區；若突破 87.368K，該區是下一個核心觀察帶。'}
+  {src:'liquidation-1w.jpeg', title:'清算熱力圖｜1 週', note:'84.7K 一帶存在明顯上方流動性；82K 下方亦有密集區。'},
+  {src:'liquidation-3d.jpeg', title:'清算熱力圖｜3 天', note:'短線 84.5K 左右的黃色帶最突出，適合作為逼空第一觀察區。'},
+  {src:'liquidation-1m.jpeg', title:'清算熱力圖｜1 個月', note:'更高週期在 87–88K 一帶出現較強流動性。'},
+  {src:'tv-4h-scenarios.jpeg', title:'4H 情境草圖', note:'原始推演：可能先上探，也保留回落至 75K 區域的替代路徑。'},
+  {src:'tv-1d-context.jpeg', title:'日線結構', note:'反彈自低位延伸後進入高位震盪，82.6K 為短線關鍵水平。'},
+  {src:'bingx-3d-macd.jpeg', title:'3 日 MACD', note:'DIF 低於 DEA，死叉初步形成，但仍位於零軸上方。'},
+  {src:'bingx-1d-macd.jpeg', title:'日線 MACD', note:'日線 MACD 死叉，且高位動能有背離疑慮。'},
+  {src:'bingx-1w-macd.jpeg', title:'週線動能', note:'週線 MACD 尚偏多，但 KDJ 位置偏高，代表反彈延伸與回撤風險同時存在。'},
+  {src:'tv-1w-orderblock.jpeg', title:'週線 Order Block', note:'上方灰區約 90–94K 為看跌訂單塊 / 供給區；若突破 87.368K，該區是下一個核心觀察帶。'}
 ];
 
 const seedEntry = {
@@ -20,7 +20,7 @@ const seedEntry = {
   levels:'82,600 / 84,500–85,000 / 87,368 / 90,000–94,000 / 75,000–77,000',
   invalidation:'跌破 82,600 後無法快速收復；反彈無法重新站回關鍵水平；80–81K 有效失守。',
   tags:['CPI','流動性','MACD','週線 OB','事件交易'],
-  images:['assets/tv-1w-orderblock.jpeg']
+  images:['tv-1w-orderblock.jpeg']
 };
 
 const reviewItems = [
@@ -67,7 +67,7 @@ function renderEntries(filter=''){
   if(!list.length){root.innerHTML='<div class="card muted">沒有符合的紀錄。</div>';return}
   list.forEach(e=>{
     const card=document.createElement('article');card.className='entry-card';
-    const img=(e.images&&e.images[0])||'assets/tv-1d-context.jpeg';
+    const img=(e.images&&e.images[0])||'tv-1d-context.jpeg';
     card.innerHTML=`<img class="entry-thumb" src="${img}" alt="${e.title}"><div><h3>${e.title}</h3><p>${e.thesis}</p><div class="entry-meta">${(e.tags||[]).map(t=>`<span class="mini-tag">${t}</span>`).join('')}<span class="mini-tag">${e.levels||''}</span></div></div><div class="entry-date">${formatDate(e.datetime)}<br>${e.catalyst||''}</div>`;
     root.appendChild(card);
   });
