@@ -23,6 +23,20 @@ const seedEntry = {
   images:['tv-1w-orderblock.jpeg']
 };
 
+// 官方時程換算為台灣時間（UTC+8）。網站會自動挑選「現在之後最近的一筆」。
+// 高風險事件先納入：FOMC、非農、CPI、PCE / GDP。
+const highImpactEvents = [
+  {datetime:'2026-10-29T02:00:00+08:00', name:'FOMC 利率決議', risk:'極高', source:'Federal Reserve', note:'02:00 決議；02:30 記者會。建議前後至少 30–60 分鐘避免高槓桿與追價。'},
+  {datetime:'2026-10-29T20:30:00+08:00', name:'美國 GDP + PCE', risk:'高', source:'BEA', note:'第三季 GDP 初值與 9 月 Personal Income and Outlays 同時公布，可能放大美元與風險資產波動。'},
+  {datetime:'2026-11-06T21:30:00+08:00', name:'美國非農就業報告 NFP', risk:'極高', source:'BLS', note:'就業、失業率、薪資同時公布。建議避開數據前後 30–60 分鐘。'},
+  {datetime:'2026-11-10T21:30:00+08:00', name:'美國 CPI', risk:'極高', source:'BLS', note:'通膨數據常直接影響降息預期與 BTC 高波動。'},
+  {datetime:'2026-11-25T21:30:00+08:00', name:'美國 PCE + GDP 修正值', risk:'高', source:'BEA', note:'聯準會偏好的通膨指標與 GDP 修正值同時公布。'},
+  {datetime:'2026-12-04T21:30:00+08:00', name:'美國非農就業報告 NFP', risk:'極高', source:'BLS', note:'就業、失業率、薪資同時公布。建議避開數據前後 30–60 分鐘。'},
+  {datetime:'2026-12-10T03:00:00+08:00', name:'FOMC 利率決議', risk:'極高', source:'Federal Reserve', note:'12 月 FOMC 決議時刻，通常伴隨政策聲明與記者會。'},
+  {datetime:'2026-12-10T21:30:00+08:00', name:'美國 CPI', risk:'極高', source:'BLS', note:'11 月 CPI 公布，注意與同日凌晨 FOMC 後的二次波動疊加。'},
+  {datetime:'2026-12-23T21:30:00+08:00', name:'美國 PCE + GDP', risk:'高', source:'BEA', note:'PCE 與第三季 GDP 第三次估值同時公布。'}
+];
+
 const reviewItems = [
   '20:30 後是否先掃 82,600 下方流動性？',
   '掃低後是否在 5–15 分鐘內快速收復 82,600？',
@@ -55,7 +69,49 @@ function getLatestEntry(){
 function formatDate(s){
   if(!s)return'';
   const d=new Date(s);
-  return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d);
+  return new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d);
+}
+
+function getNextHighImpactEvent(){
+  const now=Date.now();
+  return [...highImpactEvents]
+    .filter(e=>new Date(e.datetime).getTime()>now)
+    .sort((a,b)=>new Date(a.datetime)-new Date(b.datetime))[0] || null;
+}
+
+function countdownText(datetime){
+  const diff=new Date(datetime).getTime()-Date.now();
+  if(diff<=0)return'事件進行中 / 已公布';
+  const days=Math.floor(diff/86400000);
+  const hours=Math.floor((diff%86400000)/3600000);
+  const mins=Math.floor((diff%3600000)/60000);
+  if(days>0)return`倒數 ${days} 天 ${hours} 小時`;
+  if(hours>0)return`倒數 ${hours} 小時 ${mins} 分`;
+  return`倒數 ${mins} 分鐘`;
+}
+
+function renderMacroEvent(){
+  const eventCard=$('#dashboard .event-card');
+  if(!eventCard)return;
+  const evt=getNextHighImpactEvent();
+  const h3=eventCard.querySelector('h3');
+  const time=eventCard.querySelector('.event-time');
+  const p=eventCard.querySelector('p');
+  const rule=eventCard.querySelector('.event-rule');
+  if(!evt){
+    if(h3)h3.textContent='下一個高風險事件';
+    if(time)time.textContent='待更新';
+    if(p)p.textContent='目前內建時程已到期';
+    if(rule)rule.textContent='需要更新下一批官方事件時程。';
+    return;
+  }
+  const d=new Date(evt.datetime);
+  const dateText=new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',month:'2-digit',day:'2-digit',weekday:'short'}).format(d);
+  const timeText=new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);
+  if(h3)h3.textContent=`下一個高風險事件 · ${evt.risk}`;
+  if(time)time.textContent=`${dateText} ${timeText}`;
+  if(p)p.textContent=`${evt.name}｜台灣時間｜${countdownText(evt.datetime)}`;
+  if(rule)rule.textContent=`⚠ ${evt.note}｜來源：${evt.source}`;
 }
 
 function renderDashboardLatest(){
@@ -91,17 +147,7 @@ function renderDashboardLatest(){
     }
   }
 
-  const eventCard=$('#dashboard .event-card');
-  if(eventCard){
-    const h3=eventCard.querySelector('h3');
-    const time=eventCard.querySelector('.event-time');
-    const p=eventCard.querySelector('p');
-    const rule=eventCard.querySelector('.event-rule');
-    if(h3) h3.textContent='最近一期分析';
-    if(time) time.textContent=(e.datetime||'').slice(11,16)||'—';
-    if(p) p.textContent=e.catalyst||e.symbol||'當日交易規劃';
-    if(rule) rule.textContent=e.invalidation ? `失效條件：${e.invalidation}` : '失效條件尚未填寫。';
-  }
+  renderMacroEvent();
 
   const logicSteps=$$('#dashboard .logic-step');
   const logicData=[
@@ -211,3 +257,4 @@ $('#importInput').addEventListener('change',async e=>{const f=e.target.files[0];
 $('#searchInput').addEventListener('input',e=>renderEntries(e.target.value));
 
 renderDashboardLatest();renderEvidence();renderEntries();renderReview();
+setInterval(renderMacroEvent,60000);
