@@ -5,148 +5,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="dark" />
   <title>Trading Thesis Journal｜交易規劃與復盤</title>
-  <link rel="stylesheet" href="styles.css?v=20261016-3" />
+  <link rel="stylesheet" href="styles.css?v=20261016-4" />
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">TJ</div>
-        <div><strong>Trading Thesis</strong><span>規劃・證據・復盤</span></div>
-      </div>
-      <nav>
-        <button class="nav-item active" data-view="dashboard">總覽</button>
-        <button class="nav-item" data-view="entries">交易紀錄</button>
-        <button class="nav-item" data-view="review">復盤中心</button>
-        <button class="nav-item" data-view="settings">資料管理</button>
-      </nav>
-      <div class="sidebar-note">
-        <strong>原則</strong>
-        <p>先記錄當下假設，再記錄事後結果。避免用結果倒推「當初其實就知道」。</p>
-      </div>
+      <div class="brand"><div class="brand-mark">TJ</div><div><strong>Trading Thesis</strong><span>規劃・證據・復盤</span></div></div>
+      <nav><button class="nav-item active" data-view="dashboard">總覽</button><button class="nav-item" data-view="entries">交易紀錄</button><button class="nav-item" data-view="review">復盤中心</button><button class="nav-item" data-view="settings">資料管理</button></nav>
+      <div class="sidebar-note"><strong>原則</strong><p>先記錄當下假設，再記錄事後結果。避免用結果倒推「當初其實就知道」。</p></div>
     </aside>
-
     <main>
-      <header class="topbar">
-        <div>
-          <div class="eyebrow">PERSONAL TRADING JOURNAL</div>
-          <h1 id="pageTitle">最新交易劇本</h1>
-        </div>
-        <div class="top-actions">
-          <button class="btn ghost" id="exportBtn">匯出 JSON</button>
-          <button class="btn primary" id="newEntryBtn">＋ 新增紀錄</button>
-        </div>
-      </header>
-
+      <header class="topbar"><div><div class="eyebrow">PERSONAL TRADING JOURNAL</div><h1 id="pageTitle">最新交易劇本</h1></div><div class="top-actions"><button class="btn ghost" id="exportBtn">匯出 JSON</button><button class="btn primary" id="newEntryBtn">＋ 新增紀錄</button></div></header>
       <section id="dashboard" class="view active">
         <div class="hero-grid">
-          <article class="hero-card">
-            <div class="hero-head">
-              <div>
-                <span class="status-badge">最新交易劇本</span>
-                <h2>載入中…</h2>
-                <p class="muted">—</p>
-              </div>
-              <div class="price-box"><span>最新更新</span><strong>—</strong></div>
-            </div>
-            <div class="thesis-callout">
-              <span>核心邏輯</span>
-              <p>—</p>
-            </div>
-            <div class="metric-row"></div>
-          </article>
-
-          <article class="card event-card">
-            <div class="card-title"><h3>高風險事件</h3><span class="dot live"></span></div>
-            <div class="event-time">—</div>
-            <p>—</p>
-            <div class="event-rule">—</div>
-          </article>
+          <article class="hero-card"><div class="hero-head"><div><span class="status-badge">最新交易劇本</span><h2>載入中…</h2><p class="muted">—</p></div><div class="price-box"><span>最新更新</span><strong>—</strong></div></div><div class="thesis-callout"><span>核心邏輯</span><p>—</p></div><div class="metric-row"></div></article>
+          <article class="card event-card"><div class="card-title"><h3>高風險事件</h3><span class="dot live"></span></div><div class="event-time">—</div><p>—</p><div class="event-rule">—</div></article>
         </div>
-
-        <div class="content-grid">
-          <article class="card span-2">
-            <div class="card-title"><h3>邏輯鏈</h3><span class="muted">快速回顧當下分析邏輯</span></div>
-            <div class="logic-flow">
-              <div class="logic-step"><span>01</span><div><strong>最新觀點</strong><p>—</p></div></div>
-              <div class="flow-arrow">→</div>
-              <div class="logic-step"><span>02</span><div><strong>關鍵價位</strong><p>—</p></div></div>
-              <div class="flow-arrow">→</div>
-              <div class="logic-step"><span>03</span><div><strong>失效條件</strong><p>—</p></div></div>
-              <div class="flow-arrow">→</div>
-              <div class="logic-step"><span>04</span><div><strong>執行原則</strong><p>—</p></div></div>
-            </div>
-          </article>
-        </div>
-
-        <article class="card">
-          <div class="card-title"><h3>復盤圖片牆</h3><span class="muted">每張圖片保留上傳日期與時間，點圖可放大</span></div>
-          <div id="evidenceGallery" class="gallery"></div>
-        </article>
+        <div class="content-grid"><article class="card span-2"><div class="card-title"><h3>邏輯鏈</h3><span class="muted">快速回顧當下分析邏輯</span></div><div class="logic-flow"><div class="logic-step"><span>01</span><div><strong>最新觀點</strong><p>—</p></div></div><div class="flow-arrow">→</div><div class="logic-step"><span>02</span><div><strong>關鍵價位</strong><p>—</p></div></div><div class="flow-arrow">→</div><div class="logic-step"><span>03</span><div><strong>失效條件</strong><p>—</p></div></div><div class="flow-arrow">→</div><div class="logic-step"><span>04</span><div><strong>執行原則</strong><p>—</p></div></div></div></article></div>
+        <article class="card"><div class="card-title"><h3>復盤圖片牆</h3><span class="muted">每張圖片保留上傳日期與時間，點圖可放大</span></div><div id="evidenceGallery" class="gallery"></div></article>
       </section>
-
-      <section id="entries" class="view">
-        <div class="section-head">
-          <div><h2>交易紀錄</h2><p class="muted">依日期保存。點任一天的紀錄即可打開完整分析與當下圖片。</p></div>
-          <input id="searchInput" class="search" placeholder="搜尋幣種、標籤、邏輯…" />
-        </div>
-        <div id="entriesList" class="entries-list"></div>
-      </section>
-
-      <section id="review" class="view">
-        <article class="card">
-          <div class="card-title"><h3>本次復盤清單</h3><span class="status-badge neutral">持續更新</span></div>
-          <div class="review-grid" id="reviewChecklist"></div>
-          <div class="review-fields">
-            <label>實際走勢<textarea id="reviewActual" placeholder="寫下實際怎麼走"></textarea></label>
-            <label>執行紀錄<textarea id="reviewExecution" placeholder="有沒有照計畫執行？"></textarea></label>
-            <label>錯誤 / 偏誤<textarea id="reviewBias" placeholder="哪些地方受情緒或偏見影響？"></textarea></label>
-            <label>下次修正<textarea id="reviewNext" placeholder="下次怎麼做更好？"></textarea></label>
-          </div>
-          <div class="form-actions"><button class="btn primary" id="saveReviewBtn">儲存復盤</button></div>
-        </article>
-      </section>
-
-      <section id="settings" class="view">
-        <div class="settings-grid">
-          <article class="card">
-            <h3>資料備份</h3>
-            <p class="muted">新增紀錄與復盤仍存在瀏覽器本機，建議定期匯出 JSON。</p>
-            <div class="stack-actions"><button class="btn primary" id="exportBtn2">匯出全部資料</button><label class="btn ghost file-btn">匯入 JSON<input type="file" id="importInput" accept="application/json" /></label></div>
-          </article>
-          <article class="card">
-            <h3>使用方式</h3>
-            <ol class="number-list">
-              <li>每天一筆或多筆分析都可以保存。</li>
-              <li>每張圖片保留上傳時間。</li>
-              <li>交易紀錄可以依日期快速打開完整分析。</li>
-              <li>復盤時直接回看當時的文字與圖片，不用靠記憶。</li>
-            </ol>
-          </article>
-        </div>
-      </section>
+      <section id="entries" class="view"><div class="section-head"><div><h2>交易紀錄</h2><p class="muted">依日期保存。點任一天的紀錄即可打開完整分析與當下圖片。</p></div><input id="searchInput" class="search" placeholder="搜尋幣種、標籤、邏輯…" /></div><div id="entriesList" class="entries-list"></div></section>
+      <section id="review" class="view"><article class="card"><div class="card-title"><h3>本次復盤清單</h3><span class="status-badge neutral">持續更新</span></div><div class="review-grid" id="reviewChecklist"></div><div class="review-fields"><label>實際走勢<textarea id="reviewActual" placeholder="寫下實際怎麼走"></textarea></label><label>執行紀錄<textarea id="reviewExecution" placeholder="有沒有照計畫執行？"></textarea></label><label>錯誤 / 偏誤<textarea id="reviewBias" placeholder="哪些地方受情緒或偏見影響？"></textarea></label><label>下次修正<textarea id="reviewNext" placeholder="下次怎麼做更好？"></textarea></label></div><div class="form-actions"><button class="btn primary" id="saveReviewBtn">儲存復盤</button></div></article></section>
+      <section id="settings" class="view"><div class="settings-grid"><article class="card"><h3>資料備份</h3><p class="muted">新增紀錄與復盤仍存在瀏覽器本機，建議定期匯出 JSON。</p><div class="stack-actions"><button class="btn primary" id="exportBtn2">匯出全部資料</button><label class="btn ghost file-btn">匯入 JSON<input type="file" id="importInput" accept="application/json" /></label></div></article><article class="card"><h3>使用方式</h3><ol class="number-list"><li>每天一筆或多筆分析都可以保存。</li><li>每張圖片保留上傳時間。</li><li>交易紀錄可以依日期快速打開完整分析。</li><li>復盤時直接回看當時的文字與圖片，不用靠記憶。</li></ol></article></div></section>
     </main>
   </div>
-
-  <dialog id="entryDialog">
-    <form method="dialog" id="entryForm">
-      <div class="modal-head"><div><span class="eyebrow">NEW JOURNAL ENTRY</span><h2>新增交易規劃</h2></div><button class="icon-btn" value="cancel">✕</button></div>
-      <div class="form-grid">
-        <label>標題<input name="title" required placeholder="BTCUSDT｜當日分析" /></label>
-        <label>日期時間<input name="datetime" type="datetime-local" required /></label>
-        <label>標的<input name="symbol" placeholder="BTCUSDT" /></label>
-        <label>事件 / 催化劑<input name="catalyst" placeholder="CPI / FOMC / 無" /></label>
-        <label class="full">核心邏輯<textarea name="thesis" required placeholder="我為什麼認為市場可能這樣走？"></textarea></label>
-        <label class="full">關鍵價位<input name="levels" placeholder="81,600 / 80,800 / 84,000–85,000" /></label>
-        <label class="full">失效條件<textarea name="invalidation" placeholder="什麼情況出現，代表劇本失效？"></textarea></label>
-        <label class="full">圖片<input name="images" type="file" accept="image/*" multiple /></label>
-      </div>
-      <div class="form-actions"><button class="btn ghost" value="cancel">取消</button><button class="btn primary" value="default" id="saveEntryBtn">儲存紀錄</button></div>
-    </form>
-  </dialog>
-
+  <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="modal-head"><div><span class="eyebrow">NEW JOURNAL ENTRY</span><h2>新增交易規劃</h2></div><button class="icon-btn" value="cancel">✕</button></div><div class="form-grid"><label>標題<input name="title" required placeholder="BTCUSDT｜當日分析" /></label><label>日期時間<input name="datetime" type="datetime-local" required /></label><label>標的<input name="symbol" placeholder="BTCUSDT" /></label><label>事件 / 催化劑<input name="catalyst" placeholder="CPI / FOMC / 無" /></label><label class="full">核心邏輯<textarea name="thesis" required placeholder="我為什麼認為市場可能這樣走？"></textarea></label><label class="full">關鍵價位<input name="levels" placeholder="81,600 / 80,800 / 84,000–85,000" /></label><label class="full">失效條件<textarea name="invalidation" placeholder="什麼情況出現，代表劇本失效？"></textarea></label><label class="full">圖片<input name="images" type="file" accept="image/*" multiple /></label></div><div class="form-actions"><button class="btn ghost" value="cancel">取消</button><button class="btn primary" value="default" id="saveEntryBtn">儲存紀錄</button></div></form></dialog>
   <dialog id="imageDialog" class="image-dialog"><button class="image-close" onclick="this.parentElement.close()">✕</button><img id="lightboxImage" alt="放大圖片" /><p id="lightboxCaption"></p></dialog>
-
-  <script src="app.js?v=20261016-3"></script>
+  <script src="app.js?v=20261016-4"></script>
+  <script src="gallery-fix.js?v=20261016-4"></script>
 </body>
 </html>
