@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="dark" />
   <title>Trading Thesis Journal｜交易規劃與復盤</title>
   <link rel="stylesheet" href="styles.css?v=20261016-11" />
+  <link rel="stylesheet" href="ai-assistant.css?v=20261016-1" />
   <style>
     #dashboard .hero-grid{grid-template-columns:1fr!important}
     #dashboard .hero-card{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;align-items:stretch}
@@ -57,7 +58,24 @@
   </div>
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="modal-head"><div><span class="eyebrow">NEW JOURNAL ENTRY</span><h2>新增交易規劃</h2></div><button class="icon-btn" value="cancel">✕</button></div><div class="form-grid"><label>標題<input name="title" required placeholder="BTCUSDT｜當日分析" /></label><label>日期時間<input name="datetime" type="datetime-local" required /></label><label>標的<input name="symbol" placeholder="BTCUSDT" /></label><label>事件 / 催化劑<input name="catalyst" placeholder="CPI / FOMC / 無" /></label><label class="full">核心邏輯<textarea name="thesis" required placeholder="我為什麼認為市場可能這樣走？"></textarea></label><label class="full">關鍵價位<input name="levels" placeholder="81,600 / 80,800 / 84,000–85,000" /></label><label class="full">失效條件<textarea name="invalidation" placeholder="什麼情況出現，代表劇本失效？"></textarea></label><label class="full">圖片<input name="images" type="file" accept="image/*" multiple /></label></div><div class="form-actions"><button class="btn ghost" value="cancel">取消</button><button class="btn primary" value="default" id="saveEntryBtn">儲存紀錄</button></div></form></dialog>
   <dialog id="imageDialog" class="image-dialog"><button class="image-close" onclick="this.parentElement.close()">✕</button><img id="lightboxImage" alt="放大圖片" /><p id="lightboxCaption"></p></dialog>
+  <aside id="aiAssistant" aria-label="AI 交易助手">
+    <button id="aiAssistantToggle" class="ai-toggle" type="button" aria-expanded="false" aria-controls="aiAssistantPanel" hidden>✦ AI 交易助手</button>
+    <section id="aiAssistantPanel" class="ai-panel" role="dialog" aria-labelledby="aiAssistantTitle" aria-describedby="aiAssistantNotice" hidden>
+      <header class="ai-header"><div><span class="ai-phase">第一階段 · 前往 ChatGPT 討論</span><h2 id="aiAssistantTitle">AI 交易助手</h2></div><button id="aiAssistantClose" class="ai-close" type="button" aria-label="關閉 AI 交易助手">✕</button></header>
+      <div class="ai-body">
+        <p id="aiAssistantNotice" class="ai-message">想一起檢視交易劇本嗎？輸入問題後，會把最新劇本的核心邏輯、關鍵價位與失效條件帶到 ChatGPT。本頁不會產生即時 AI 回覆。</p>
+        <p class="ai-context">目前劇本：<strong id="aiAssistantEntry"></strong></p>
+        <label class="ai-label" for="aiAssistantQuestion">你的問題</label>
+        <textarea id="aiAssistantQuestion" rows="3" maxlength="2000" placeholder="例如：哪些價格行為代表這個劇本已失效？"></textarea>
+        <details class="ai-preview"><summary>預覽帶入的完整內容</summary><label class="ai-label" for="aiAssistantPrompt">劇本與問題（可選取複製）</label><textarea id="aiAssistantPrompt" rows="7" readonly></textarea></details>
+        <p class="ai-note">點擊後會在新分頁開啟 ChatGPT，劇本與問題會包含在連結中，請確認沒有私人資料。若未自動帶入，請複製完整內容後貼上；可能需要登入 ChatGPT。</p>
+        <div class="ai-actions"><a id="aiAssistantOpen" class="ai-primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">帶著問題前往 ChatGPT ↗</a><button id="aiAssistantCopy" class="ai-secondary" type="button">複製完整內容</button></div>
+        <p id="aiAssistantStatus" class="ai-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </aside>
   <script src="app.js?v=20261016-11"></script>
   <script src="gallery-fix.js?v=20261016-10"></script>
+  <script src="ai-assistant.js?v=20261016-1"></script>
 </body>
 </html>
