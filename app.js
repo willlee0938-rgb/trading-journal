@@ -1,0 +1,116 @@
+const seedEvidence = [
+  {src:'assets/liquidation-1w.jpeg', title:'清算熱力圖｜1 週', note:'84.7K 一帶存在明顯上方流動性；82K 下方亦有密集區。'},
+  {src:'assets/liquidation-3d.jpeg', title:'清算熱力圖｜3 天', note:'短線 84.5K 左右的黃色帶最突出，適合作為逼空第一觀察區。'},
+  {src:'assets/liquidation-1m.jpeg', title:'清算熱力圖｜1 個月', note:'更高週期在 87–88K 一帶出現較強流動性。'},
+  {src:'assets/tv-4h-scenarios.jpeg', title:'4H 情境草圖', note:'原始推演：可能先上探，也保留回落至 75K 區域的替代路徑。'},
+  {src:'assets/tv-1d-context.jpeg', title:'日線結構', note:'反彈自低位延伸後進入高位震盪，82.6K 為短線關鍵水平。'},
+  {src:'assets/bingx-3d-macd.jpeg', title:'3 日 MACD', note:'DIF 低於 DEA，死叉初步形成，但仍位於零軸上方。'},
+  {src:'assets/bingx-1d-macd.jpeg', title:'日線 MACD', note:'日線 MACD 死叉，且高位動能有背離疑慮。'},
+  {src:'assets/bingx-1w-macd.jpeg', title:'週線動能', note:'週線 MACD 尚偏多，但 KDJ 位置偏高，代表反彈延伸與回撤風險同時存在。'},
+  {src:'assets/tv-1w-orderblock.jpeg', title:'週線 Order Block', note:'上方灰區約 90–94K 為看跌訂單塊 / 供給區；若突破 87.368K，該區是下一個核心觀察帶。'}
+];
+
+const seedEntry = {
+  id:'btc-cpi-20261014',
+  title:'BTCUSDT｜CPI 前流動性劇本',
+  datetime:'2026-10-14T20:07',
+  symbol:'BTCUSDT',
+  catalyst:'US CPI 20:30',
+  thesis:'可能先掃 82,600 下方流動性並快速收復，之後利用 84.5K 與 87.368K 上方空單清算做燃料，突破前高後進入 90–94K 週線看跌訂單塊，再觀察是否形成中期反轉。',
+  levels:'82,600 / 84,500–85,000 / 87,368 / 90,000–94,000 / 75,000–77,000',
+  invalidation:'跌破 82,600 後無法快速收復；反彈無法重新站回關鍵水平；80–81K 有效失守。',
+  tags:['CPI','流動性','MACD','週線 OB','事件交易'],
+  images:['assets/tv-1w-orderblock.jpeg']
+};
+
+const reviewItems = [
+  '20:30 後是否先掃 82,600 下方流動性？',
+  '掃低後是否在 5–15 分鐘內快速收復 82,600？',
+  '是否形成向上 displacement / MSS？',
+  '84,500–85,000 是否被突破並站穩？',
+  '87,368 前高是否被突破？',
+  '是否進入 90,000–94,000 週線供給區？',
+  '進入供給區後是否出現 4H / 1D 看跌 MSS？',
+  '75,000–77,000 是否在後續成為回撤目標？',
+  '是否因為「缺口必補」或「OB 必反轉」產生確認偏誤？'
+];
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const DB_KEY = 'tradeJournalEntriesV1';
+const REVIEW_KEY = 'tradeJournalReviewV1';
+
+function loadEntries(){
+  const saved = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  if(!saved.find(x=>x.id===seedEntry.id)) saved.unshift(seedEntry);
+  return saved;
+}
+function saveEntries(entries){localStorage.setItem(DB_KEY, JSON.stringify(entries));}
+let entries = loadEntries(); saveEntries(entries);
+
+function renderEvidence(){
+  const root=$('#evidenceGallery');
+  root.innerHTML='';
+  seedEvidence.forEach(item=>{
+    const el=document.createElement('div'); el.className='evidence';
+    el.innerHTML=`<img src="${item.src}" alt="${item.title}"><div class="caption"><strong>${item.title}</strong><span>${item.note}</span></div>`;
+    el.onclick=()=>openLightbox(item.src,item.title+'｜'+item.note);
+    root.appendChild(el);
+  });
+}
+function openLightbox(src,caption){$('#lightboxImage').src=src;$('#lightboxCaption').textContent=caption;$('#imageDialog').showModal();}
+
+function formatDate(s){if(!s)return'';const d=new Date(s);return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)}
+function renderEntries(filter=''){
+  const root=$('#entriesList'); root.innerHTML='';
+  const list=entries.filter(e=>JSON.stringify(e).toLowerCase().includes(filter.toLowerCase()));
+  if(!list.length){root.innerHTML='<div class="card muted">沒有符合的紀錄。</div>';return}
+  list.forEach(e=>{
+    const card=document.createElement('article');card.className='entry-card';
+    const img=(e.images&&e.images[0])||'assets/tv-1d-context.jpeg';
+    card.innerHTML=`<img class="entry-thumb" src="${img}" alt="${e.title}"><div><h3>${e.title}</h3><p>${e.thesis}</p><div class="entry-meta">${(e.tags||[]).map(t=>`<span class="mini-tag">${t}</span>`).join('')}<span class="mini-tag">${e.levels||''}</span></div></div><div class="entry-date">${formatDate(e.datetime)}<br>${e.catalyst||''}</div>`;
+    root.appendChild(card);
+  });
+}
+
+function switchView(id){
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
+  $$('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===id));
+  const titles={dashboard:'交易規劃總覽',entries:'交易紀錄',review:'復盤中心',settings:'資料管理'};$('#pageTitle').textContent=titles[id];
+}
+$$('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function renderReview(){
+  const saved=JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');
+  const root=$('#reviewChecklist');root.innerHTML='';
+  reviewItems.forEach((t,i)=>{
+    const lab=document.createElement('label');lab.className='review-item';
+    lab.innerHTML=`<input type="checkbox" data-i="${i}" ${saved.checked?.[i]?'checked':''}><span>${t}</span>`;root.appendChild(lab);
+  });
+  $('#reviewActual').value=saved.actual||'';$('#reviewExecution').value=saved.execution||'';$('#reviewBias').value=saved.bias||'';$('#reviewNext').value=saved.next||'';
+}
+$('#saveReviewBtn').addEventListener('click',()=>{
+  const checked={};$$('#reviewChecklist input').forEach(x=>checked[x.dataset.i]=x.checked);
+  localStorage.setItem(REVIEW_KEY,JSON.stringify({checked,actual:$('#reviewActual').value,execution:$('#reviewExecution').value,bias:$('#reviewBias').value,next:$('#reviewNext').value,updatedAt:new Date().toISOString()}));
+  const b=$('#saveReviewBtn');const old=b.textContent;b.textContent='已儲存 ✓';setTimeout(()=>b.textContent=old,1200);
+});
+
+$('#newEntryBtn').addEventListener('click',()=>{const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); $('#entryForm [name=datetime]').value=d.toISOString().slice(0,16);$('#entryDialog').showModal();});
+$('#saveEntryBtn').addEventListener('click',async e=>{
+  e.preventDefault();const form=$('#entryForm');if(!form.reportValidity())return;
+  const fd=new FormData(form);const files=[...form.elements.images.files];const images=[];
+  for(const f of files.slice(0,6)) images.push(await compressImage(f));
+  const entry={id:'e'+Date.now(),title:fd.get('title'),datetime:fd.get('datetime'),symbol:fd.get('symbol'),catalyst:fd.get('catalyst'),thesis:fd.get('thesis'),levels:fd.get('levels'),invalidation:fd.get('invalidation'),tags:[fd.get('symbol'),fd.get('catalyst')].filter(Boolean),images};
+  entries.unshift(entry);saveEntries(entries);renderEntries();form.reset();$('#entryDialog').close();switchView('entries');
+});
+function compressImage(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const max=1400;let w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',.72))};img.onerror=reject;img.src=r.result};r.onerror=reject;r.readAsDataURL(file)});}
+
+function exportAll(){
+  const payload={version:1,exportedAt:new Date().toISOString(),entries,review:JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}')};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`trading-journal-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);
+}
+$('#exportBtn').onclick=exportAll;$('#exportBtn2').onclick=exportAll;
+$('#importInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(Array.isArray(data.entries)){entries=data.entries;saveEntries(entries)}if(data.review)localStorage.setItem(REVIEW_KEY,JSON.stringify(data.review));renderEntries();renderReview();alert('匯入完成');}catch(err){alert('匯入失敗：JSON 格式不正確')}});
+$('#searchInput').addEventListener('input',e=>renderEntries(e.target.value));
+
+renderEvidence();renderEntries();renderReview();

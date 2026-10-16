@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Trading Thesis Journal｜交易規劃與復盤</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">TJ</div>
+        <div><strong>Trading Thesis</strong><span>規劃・證據・復盤</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="dashboard">總覽</button>
+        <button class="nav-item" data-view="entries">交易紀錄</button>
+        <button class="nav-item" data-view="review">復盤中心</button>
+        <button class="nav-item" data-view="settings">資料管理</button>
+      </nav>
+      <div class="sidebar-note">
+        <strong>原則</strong>
+        <p>先記錄當下假設，再記錄事後結果。避免用結果倒推「當初其實就知道」。</p>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">PERSONAL TRADING JOURNAL</div>
+          <h1 id="pageTitle">交易規劃總覽</h1>
+        </div>
+        <div class="top-actions">
+          <button class="btn ghost" id="exportBtn">匯出 JSON</button>
+          <button class="btn primary" id="newEntryBtn">＋ 新增紀錄</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="hero-grid">
+          <article class="hero-card">
+            <div class="hero-head">
+              <div>
+                <span class="status-badge">事件前規劃・未驗證</span>
+                <h2>BTCUSDT｜CPI 前流動性劇本</h2>
+                <p class="muted">2026-10-14 · 20:30 CPI 前 · BTC 約 83.4K</p>
+              </div>
+              <div class="price-box"><span>關鍵中樞</span><strong>83,400</strong></div>
+            </div>
+            <div class="thesis-callout">
+              <span>核心假設</span>
+              <p>短線可能先掃 <b>82,600</b> 下方流動性，快速收復後利用上方空單清算作燃料，依序逼近 <b>84,500 → 87,368</b>；若突破前高，可能進入 <b>90,000–94,000 週線看跌訂單塊</b>，再觀察是否形成中期反轉與下殺。</p>
+            </div>
+            <div class="metric-row">
+              <div><span>下方流動性</span><strong>82,600</strong></div>
+              <div><span>第一目標</span><strong>84,500–85,000</strong></div>
+              <div><span>前高 / BSL</span><strong>87,368</strong></div>
+              <div><span>週線供給</span><strong>90,000–94,000</strong></div>
+              <div><span>中期回撤區</span><strong>75,000–77,000</strong></div>
+            </div>
+          </article>
+
+          <article class="card event-card">
+            <div class="card-title"><h3>事件節點</h3><span class="dot live"></span></div>
+            <div class="event-time">20:30</div>
+            <p>美國 CPI 公布</p>
+            <div class="event-rule">不預判第一根消息 K。優先看「掃流動性後能否快速收復」與「突破後是否站穩」。</div>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <article class="card span-2">
+            <div class="card-title"><h3>邏輯鏈</h3><span class="muted">從證據到交易劇本</span></div>
+            <div class="logic-flow">
+              <div class="logic-step"><span>01</span><div><strong>大級別動能轉弱</strong><p>日線 MACD 死叉、疑似頂背離；3 日 MACD 進入死叉，代表反彈動能正在降溫。</p></div></div>
+              <div class="flow-arrow">→</div>
+              <div class="logic-step"><span>02</span><div><strong>但週線尚未全面轉空</strong><p>週線 MACD 仍偏多、且已突破下降趨勢線；因此「先延伸一段上漲再轉空」仍合理。</p></div></div>
+              <div class="flow-arrow">→</div>
+              <div class="logic-step"><span>03</span><div><strong>上方有可利用流動性</strong><p>熱力圖顯示 84.5K 一帶清算集中，87K–88K 亦有更高週期流動性。</p></div></div>
+              <div class="flow-arrow">→</div>
+              <div class="logic-step"><span>04</span><div><strong>最理想路徑</strong><p>先掃 82.6K → 快速收復 → 逼空 84.5K → 攻前高 87.368K → 90–94K 週線供給。</p></div></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title"><h3>失效條件</h3></div>
+            <ul class="check-list danger-list">
+              <li>跌破 82,600 後，15m/1H 無法快速收復。</li>
+              <li>反彈無法重返 82,600，形成 lower high。</li>
+              <li>80,000–81,000 失守且成交量放大。</li>
+              <li>進入 90–94K 後若「沒有」看跌結構，不提前硬空。</li>
+            </ul>
+          </article>
+        </div>
+
+        <article class="card">
+          <div class="card-title"><h3>情境樹</h3><span class="muted">用價格行為確認，不用故事硬套</span></div>
+          <div class="scenario-grid">
+            <div class="scenario preferred"><span class="tag">主劇本</span><h4>掃低 → 逼空 → 週線供給</h4><p><b>82.6K</b> 假跌破並快速收復 → <b>84.5K</b> → <b>87.368K</b> → <b>90–94K</b>。到供給區後再等待 4H / 1D MSS。</p></div>
+            <div class="scenario"><span class="tag">替代 A</span><h4>不掃低，直接逼空</h4><p>消息偏多或現貨買盤強，價格不回 82.6K，直接突破 84.5K。若回踩守住，仍可延伸到前高。</p></div>
+            <div class="scenario"><span class="tag">替代 B</span><h4>跌破支撐，直接走弱</h4><p>82.6K 跌破後無法收回 → 80–81K → 75–77K。此時「先逼空到 90K」劇本失效。</p></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title"><h3>證據圖片牆</h3><span class="muted">點圖可放大</span></div>
+          <div id="evidenceGallery" class="gallery"></div>
+        </article>
+      </section>
+
+      <section id="entries" class="view">
+        <div class="section-head">
+          <div><h2>交易紀錄</h2><p class="muted">每次規劃都留下「當時看到什麼、怎麼想、哪裡算錯」。</p></div>
+          <input id="searchInput" class="search" placeholder="搜尋幣種、標籤、邏輯…" />
+        </div>
+        <div id="entriesList" class="entries-list"></div>
+      </section>
+
+      <section id="review" class="view">
+        <article class="card">
+          <div class="card-title"><h3>本次復盤清單</h3><span class="status-badge neutral">等待事件結果</span></div>
+          <div class="review-grid" id="reviewChecklist"></div>
+          <div class="review-fields">
+            <label>實際走勢<textarea id="reviewActual" placeholder="例：20:30 先插 82.4K，8 分鐘內收復 82.6K，21:10 突破 84.5K…"></textarea></label>
+            <label>執行紀錄<textarea id="reviewExecution" placeholder="有沒有追單？有沒有等收復？止損是否照計畫？"></textarea></label>
+            <label>錯誤 / 偏誤<textarea id="reviewBias" placeholder="例：過度相信缺口必補、因看空而忽略價格強勢…"></textarea></label>
+            <label>下次修正<textarea id="reviewNext" placeholder="例：消息面只做第二段，第一根 K 不進場；OB 必須等 MSS 才做空…"></textarea></label>
+          </div>
+          <div class="form-actions"><button class="btn primary" id="saveReviewBtn">儲存復盤</button></div>
+        </article>
+      </section>
+
+      <section id="settings" class="view">
+        <div class="settings-grid">
+          <article class="card">
+            <h3>資料備份</h3>
+            <p class="muted">所有新增紀錄與復盤文字存在瀏覽器本機。建議定期匯出 JSON。</p>
+            <div class="stack-actions"><button class="btn primary" id="exportBtn2">匯出全部資料</button><label class="btn ghost file-btn">匯入 JSON<input type="file" id="importInput" accept="application/json" /></label></div>
+          </article>
+          <article class="card">
+            <h3>使用方式</h3>
+            <ol class="number-list">
+              <li>事件前先寫劇本、關鍵價位、失效條件。</li>
+              <li>圖片只記錄當時看到的資訊，不事後替換。</li>
+              <li>事件後再寫結果，避免 hindsight bias。</li>
+              <li>每月統計「哪種邏輯最常有效、哪種錯誤最常重複」。</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="entryDialog">
+    <form method="dialog" id="entryForm">
+      <div class="modal-head"><div><span class="eyebrow">NEW JOURNAL ENTRY</span><h2>新增交易規劃</h2></div><button class="icon-btn" value="cancel">✕</button></div>
+      <div class="form-grid">
+        <label>標題<input name="title" required placeholder="BTCUSDT｜FOMC 前流動性規劃" /></label>
+        <label>日期時間<input name="datetime" type="datetime-local" required /></label>
+        <label>標的<input name="symbol" placeholder="BTCUSDT" /></label>
+        <label>事件 / 催化劑<input name="catalyst" placeholder="CPI / FOMC / 非農 / 無" /></label>
+        <label class="full">核心邏輯<textarea name="thesis" required placeholder="用自己的話寫：我為什麼認為市場可能這樣走？"></textarea></label>
+        <label class="full">關鍵價位<input name="levels" placeholder="82600, 84500, 87368, 90000-94000" /></label>
+        <label class="full">失效條件<textarea name="invalidation" placeholder="什麼情況出現，就代表原本劇本錯了？"></textarea></label>
+        <label class="full">圖片<input name="images" type="file" accept="image/*" multiple /></label>
+      </div>
+      <div class="form-actions"><button class="btn ghost" value="cancel">取消</button><button class="btn primary" value="default" id="saveEntryBtn">儲存紀錄</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="imageDialog" class="image-dialog"><button class="image-close" onclick="this.parentElement.close()">✕</button><img id="lightboxImage" alt="放大圖片" /><p id="lightboxCaption"></p></dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
