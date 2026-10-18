@@ -68,9 +68,9 @@ function loadEntries(){
   });
   return saved.sort((a,b)=>new Date(b.datetime||0)-new Date(a.datetime||0));
 }
-function saveEntries(v){localStorage.setItem(DB_KEY,JSON.stringify(v))}
+function saveEntries(v){try{localStorage.setItem(DB_KEY,JSON.stringify(v));return true}catch(err){console.warn('本機儲存空間不足，保留目前畫面資料，請先匯出 JSON 備份',err);return false}}
 let entries=loadEntries();saveEntries(entries);
-function getLatestEntry(){return entries[0]||seedEntries[0]}
+function getLatestEntry(){const all=[...entries,...seedEntries];return all.sort((a,b)=>new Date(b.datetime||0)-new Date(a.datetime||0))[0]||seedEntries[0]}
 
 function countdownText(datetime){const diff=new Date(datetime)-Date.now();if(diff<=0)return'事件進行中';const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);return d?`倒數 ${d} 天 ${h} 小時`:h?`倒數 ${h} 小時 ${m} 分`:`倒數 ${m} 分鐘`}
 function renderMacroEvent(){
