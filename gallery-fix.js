@@ -52,6 +52,12 @@
 
   async function restorePrimary(){
     const img=document.getElementById('heroPrimaryImage'),card=document.getElementById('primaryAnalysisCard');if(!img)return;
+    const latest=typeof getLatestEntry==='function'?getLatestEntry():null;
+    if(latest&&latest.id!=='btc-20261016-mss-fvg'){
+      if(card){card.style.display='none';card.setAttribute('aria-hidden','true')}
+      return;
+    }
+    if(card){card.style.display='';card.removeAttribute('aria-hidden')}
     try{const r=await fetch(PRIMARY_PAYLOAD,{cache:'no-store'});if(!r.ok)return;const b64=(await r.text()).trim();if(!b64)return;const src='data:image/jpeg;base64,'+b64;img.src=src;if(card)card.onclick=()=>openImage(src,'BTCUSDT｜MSS 後 FVG 回踩主分析圖｜2026/10/16 16:25');}catch(e){}
   }
 
